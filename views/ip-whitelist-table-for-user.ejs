@@ -1,0 +1,53 @@
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+      <div class="table-responsive overflow-hidden">
+        <h2>IP Whitelist for <%= user.first_name%> <%= user.last_name%></h2>
+        <table class="table table-striped mb-0">
+          <tbody>
+            <% if(ips){ %> <% ips.forEach(ip => { %>
+            <tr class="ip-row">
+              <th scope="row" class="id align-middle"><%= ip.id %></th>
+              <% if (ip.is_whitelisted) { %>
+              <td class="ip align-middle" style="color: green;"><%= ip.ip %></td>
+              <% } %>
+              <% if (!ip.is_whitelisted) { %>
+                <td class="ip align-middle" style="color: red;"><%= ip.ip %></td>
+                <% } %>
+              <td class="align-middle"><%= ip.description %></td>
+              <td>
+                <% if (status.delete) { %>
+                <form
+                  action="/ip/delete-whitelist/<%= ip.id %>"
+                  id="request-ip"
+                  method="POST"
+                >
+                  <input type="hidden" name="request_id" value="<%= status.delete.id %>">
+                  <button
+                    class="btn btn-danger waves-effect waves-light remove-button"
+                    type="submit"
+                  >
+                    Remove
+                  </button>
+                <% } %>
+                </form>
+              </td>
+            </tr>
+            <% });%> 
+            <% } %>
+    </tbody>
+</table>
+<p class="text-muted my-2"><%= ips.length %>/15</p>
+
+<% if (ips.length <= 15) {%>
+<div class="my-4">
+  <form action="/ip/create" method="POST">
+    <input type="text" name="ip" placeholder="ip">
+    <input type="text" name="description" placeholder="desc" required>
+    <input type="hidden" name="request_issuer" value="<%= user.id %>">
+    <button
+    class="btn btn-primary waves-effect waves-light"
+    type="submit"
+    > Create Ip
+  </form>      
+</div>
+<% } %>

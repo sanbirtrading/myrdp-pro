@@ -1,0 +1,70 @@
+<%- include('./messages.ejs') %>
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <div class="table-responsive overflow-hidden">
+      <h1>Requests History</h1>
+      <table class="table table-striped mb-0">
+        <thead style="background-color: black; color: white">
+          <tr>
+            <th>ID</th>
+            <th>Request Type</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Created On</th>
+            <th>Created By</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% requests.forEach(request => { %>
+          <tr id="row_to_be_disable" class="pointer request-row">
+            <th scope="row" class="id"><%= request.id %></th>
+            <td class="request-type"><%= request.request_type %></td>
+            <td class="description"><%= request.description %></td>
+            <td class="status">
+              <% if(request.resolved){ %>
+              <i class="mdi mdi-checkbox-blank text-success"></i>
+              <% } else{ %>
+              <i class="mdi mdi-checkbox-blank text-danger"></i>
+              <% } %>
+            </td>
+            <td class="created-on">
+              <%= moment(request.createdAt).format('DD-MM-YYYY') %>
+            </td>
+            <td class="created-by">
+              <%= request['User.first_name'] %> <%= request['User.last_name'] %>
+            </td>
+            <td>
+              <form action="/request/accept" method="POST">
+                <input type="hidden" name="request_id" value="<%= request.id %>">
+
+                <% if(!request.resolved) { %>
+                  <button 
+                    class="btn btn-success"
+                    id="accept_button"
+                    type="submit">
+                      Accept
+                </button>
+                <% } %>
+                
+              </form>
+            </td>
+            <td>
+              <form action="" method="POST">
+                <input type="hidden" name="request_id" value="<%= request.id %>">
+                 <% if(!request.resolved) { %>
+                <button 
+                class="btn btn-danger"
+                id="decline_button"
+                type="submit">
+                  Decline
+                </button>
+                <% } %>
+              </form>
+            </td>
+          </tr>
+          <% });%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

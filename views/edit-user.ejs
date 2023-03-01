@@ -1,0 +1,111 @@
+<%- include('./includes/head.ejs') %>
+<link rel="stylesheet" href="/css/admin-server-styles.css">
+<link rel="stylesheet" href="/css/top-bar-style.css">
+</head>
+<body>
+    <% if (user.is_admin === true) { %>
+        <%- include('./includes/menu-admin.ejs') %>
+        <% }  else {%>
+            <%- include('./includes/menu.ejs') %>
+            <% }%>
+    <%- include('./includes/is-manager.ejs') %>
+    <%- include('./includes/scripts.ejs') %>
+    <div class="main-content overflow-visible">
+        <div class="page-content">
+            <div class="container-fluid">
+            <h1 class="py-2">Manage User <strong><%= user.first_name %> <%= user.last_name %></strong></h1>
+            <div>
+                <div class="d-flex">
+                  <button 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#editUserModal"
+                  class="my-2 btn btn-sm btn-success">Edit User</button>
+                  <form 
+                  action="/user/delete-user/<%= user.id %>"
+                  method="POST"
+                  >
+                    <button 
+                    type="submit"
+                    class="m-2 btn btn-sm btn-danger">Delete User</button>
+                </form>
+                </div>
+                <div
+          class="modal fade bs-example-modal-lg-add-user"
+          tabindex="-1"
+          role="dialog"
+          aria-hidden="true"
+          id="editUserModal"
+        >
+          <%- include('./includes/modal-title.ejs') %> <strong>Edit User <%= user.first_name %> <%= user.last_name %></strong> <%-
+          include('./includes/modal-body.ejs') %>
+          <form
+            class="form-horizontal"
+            action="/user/edit-user"
+            id="add-user"
+            method="POST"
+          >
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-4">
+                  <input type="hidden" name="id" value="<%= user.id %>">
+                  <label class="form-label" for="first_name">First Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="first_name"
+                    name="first_name"
+                    value="<%= user.first_name %>"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="form-label" for="last_name">Last Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="last_name"
+                    name="last_name"
+                    value="<%= user.last_name %>"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="form-label" for="username">Username</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                    value="<%= user.username %>"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="form-label" for="email">Email</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    value="<%= user.email %>"
+                  />
+                </div>
+                <div class="d-grid mt-4">
+                  <button
+                    class="btn btn-primary waves-effect waves-light"
+                    type="submit"
+                    name="add-user"
+                    value="add-user"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <%- include('./includes/modal-end.ejs') %>
+        </div>
+            </div>
+        <div class="container">
+          <%- include('./includes/server-table-for-user.ejs') %>
+        </div>
+        </div>
+    </div>
+</body>

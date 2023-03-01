@@ -1,0 +1,126 @@
+<%- include('./includes/head.ejs') %>
+<%- include('./includes/menu.ejs') %>
+<%- include('./includes/is-manager.ejs') %>
+<link rel="stylesheet" href="/css/admin-server-styles.css">
+<link rel="stylesheet" href="/css/top-bar-style.css">
+</head>
+<body>
+<div class="main-content overflow-visible">
+  <div class="page-content">
+    <div class="container-fluid">
+    <div class="row justify-content-center my-5">
+        <div class="col-lg-12">
+          <div class="table-responsive overflow-hidden">  
+              <h2 class="my-5" style="display: inline;"><%= pageHeader %></h2>
+            <table class="table table-striped mb-0 mt-3" >
+              <thead style="background-color: black; color: white; ">
+                <tr>
+                  <th>ID</th>
+                  <th>IP</th>
+                  <th>Port</th>
+                  <th>User</th>
+                  <th>Office</th>
+                  <th>
+                    Password
+                    <input
+                      class="form-check-input"
+                      id="password-checkbox"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                    />
+                  </th>
+                  <th>ST</th>
+                  <th>RAM</th>
+                  <th>Hard Disk</th>
+                  <th>CPU</th>
+                  <th>
+                    Admin Password
+                    <input
+                      class="form-check-input"
+                      id="password-checkbox-admin"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                    />
+                  </th>
+                  <th>Unique ID</th>
+                  <th>Payment</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% serversAll.forEach(server => { %>
+                <tr class="server-row">
+                  <th scope="row" class="id align-middle"><%= server.id %></th>
+                  <td class="ip align-middle"><%= server.ip %></td>
+                  <td class="port align-middle"><%= server.port %></td>
+                  <td class="user align-middle">
+                    <%= currentUser.first_name %> <%= currentUser.last_name %>
+                  </td>
+                  <td class="office align-middle">
+                    <%= server.office %>
+                  </td>
+                  <td class="password-tr align-middle">
+                    <span class="password-row blur"><%= server.password %></span>
+                  </td>
+                  <td class="status align-middle">
+                    <% if(server.status){ %>
+                    <i class="mdi mdi-checkbox-blank text-success"></i>
+                    <% } else{ %>
+                    <i class="mdi mdi-checkbox-blank text-danger"></i>
+                    <% } %>
+                  </td>
+                  <td class="ram align-middle"><%= server.ram %></td>
+                  <td class="hard-disk align-middle"><%= server.hard_disk %></td>
+                  <td class="cpu align-middle"><%= server.cpu %></td>
+                  <td class="admin-password align-middle">
+                    <span class="password-row-admin blur"
+                      ><%= server.admin_password %></span>
+                  </td>
+                  <td class="unique-id align-middle"><%= server.unique_id %></td>
+                  <td class="payment align-middle"><%= server.price %></td>
+                  <td>
+                    <% if (!server.status){ %>
+                    <form 
+                    action="/request/activate/<%= server.id %>"
+                    method="POST">
+                      <button
+                      class="btn btn-sm btn-success"
+                      type="submit"
+                      >
+                        Activate
+                      </button>
+                    </form>
+                    <% } %>
+                  </td>
+                </tr>
+                <% });%>
+              </tbody>
+            </table>
+            <form
+            action="/request/server/<%= currentUser.id %>"
+            id="request-server"
+            method="POST"
+          >
+            <button
+              class="btn btn-primary waves-effect waves-light"
+              name="action"
+              formaction="/request/server/<%= currentUser.id %>"
+              value="request-server"
+              type="submit"
+            >
+              Request Server
+            </button>
+          </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<script type="text/javascript" src="/js/top-bar.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<%- include('./includes/scripts.ejs') %>
+<%- include('./includes/end.ejs') %>
+</body>
